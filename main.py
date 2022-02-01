@@ -8,8 +8,8 @@ import PandaScore
 import CONFIG
 import SECRETS
 
-sg = sendgrid.SendGridAPIClient(api_key=SECRETS.SG_API_KEY)
-ps = PandaScore.PandaScoreAPIClient(API_KEY=SECRETS.PS_API_KEY)
+sg = sendgrid.SendGridAPIClient(SECRETS.SG_API_KEY)
+ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY)
 
 tournaments = ps.get_running_tournaments()
 
@@ -23,7 +23,7 @@ subject = CONFIG.EMAIL_SUBJECT
 content = HtmlContent(data_content)
 mail = Mail(from_email, to_email, subject, content)
 
-response = sg.client.mail.send.post(request_body=mail.get())
+response = sg.send(message=mail)
 print(response.status_code)
 print(response.body)
 print(response.headers)
