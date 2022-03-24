@@ -3,15 +3,18 @@ import os
 
 from sendgrid.helpers.mail import *
 
-import PandaScore
+# import PandaScore
+from ppsaw import PandaScoreAPIClient
 
 import CONFIG
 import SECRETS
 
 sg = sendgrid.SendGridAPIClient(SECRETS.SG_API_KEY)
-ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY)
+ps = PandaScoreAPIClient(SECRETS.PS_API_KEY)
 
-tournaments = ps.get_running_tournaments()
+leagues = ps.list_leagues()
+
+leagues = leagues[:10]
 
 # Next actions for me 
 # 1) Get rid of all the garbage tournaments that I don't care about
@@ -21,7 +24,7 @@ tournaments = ps.get_running_tournaments()
 # 3) Improve formatting (include images, actually use formatting stuff)
 
 html_content = ""
-for tournament in tournaments:
+for league in leagues:
     output_string = ""
 
     league = tournament["league"]
