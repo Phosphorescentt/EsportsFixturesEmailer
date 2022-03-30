@@ -1,6 +1,6 @@
 import PandaScore
 
-from config import SETTINGS, SECRETS
+from settings import CONFIG, SECRETS
 
 def generate_html_from_series(data):
     """
@@ -12,7 +12,7 @@ def generate_html_from_series(data):
     6. return data
     """
 
-    ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY, SETTINGS.PS_CONFIG)
+    ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY, CONFIG.PS_CONFIG)
 
     out = ""
     for serie in data:
@@ -39,5 +39,7 @@ def generate_html_from_series(data):
     return out
 
 
-def generate_html_from_game(data):
-    return data
+def generate_html_from_leagues_by_vg(leagues_by_vg):
+    ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY, CONFIG.PS_CONFIG)
+
+    return leagues_by_vg

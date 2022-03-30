@@ -2,24 +2,19 @@ import sendgrid
 
 from sendgrid.helpers.mail import Email, To, HtmlContent, Mail
 
-import PandaScore
-import Processing
+import render
 
-import CONFIG
-import SECRETS
+from config import SETTINGS, SECRETS
 
-ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY, CONFIG.PS_CONFIG)
 sg = sendgrid.SendGridAPIClient(SECRETS.SG_API_KEY)
 
-series = ps.get_running_series()
+html = render.main()
 
-html = Processing.generate_html_from_series(series)
-
-from_email = Email(CONFIG.FROM_EMAIL)
-subject = CONFIG.EMAIL_SUBJECT
+from_email = Email(SETTINGS.FROM_EMAIL)
+subject = SETTINGS.EMAIL_SUBJECT
 content = HtmlContent(html)
 
-for email in CONFIG.TO_EMAILS:
+for email in SETTINGS.TO_EMAILS:
     to_email = To(email)
     mail = Mail(from_email, to_email, subject, content)
 
