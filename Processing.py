@@ -1,9 +1,8 @@
 import PandaScore
 
-import SECRETS
+from config import SETTINGS, SECRETS
 
-
-def generate_html(data):
+def generate_html_from_series(data):
     """
     1. iterate over data
     2. get tournaments for each serie
@@ -13,21 +12,32 @@ def generate_html(data):
     6. return data
     """
 
-    ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY)    
+    ps = PandaScore.PandaScoreAPIClient(SECRETS.PS_API_KEY, SETTINGS.PS_CONFIG)
 
-    out = "<hr>"
-    # out = []
+    out = ""
     for serie in data:
-        tournaments = serie["tournaments"]
-        out += "<h1>" + serie["name"] + "</h1><br>"
-        for tournament in tournaments:
-            out += "<h3>" + tournament["name"] + "</h3><br>"
-            slug = tournament["slug"]
-            tournament_info = ps.get_running_tournament_by_id_slug(slug)
+        out += "<hr>"
+        league = serie["league"]
+        out += "<h1>" + league["name"] + "</h1><br>"
 
-            for match in tournament_info["matches"]:
-                # out += match
-                out += match["name"] + "<br>"
-                # out.append(match)
+        s_name = serie["name"]
+        if s_name is not None:
+            out += "<h2>" + s_name + "</h2><br>"
+
+        tournaments = serie["tournaments"]
+        if tournaments is not None:
+            for tournament in tournaments:
+                out += "<h3>" + tournament["name"] + "</h3><br>"
+                slug = tournament["slug"]
+                tournament_info = ps.get_running_tournament_by_id_slug(slug)
+
+                matches = tournament_info["matches"]
+                if matches is not None:
+                    for match in matches:
+                        out += match["name"] + "<br>"
 
     return out
+
+
+def generate_html_from_game(data):
+    return data

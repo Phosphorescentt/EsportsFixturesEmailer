@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 tmp/
+data/
 SECRETS.py
 CONFIG.py
